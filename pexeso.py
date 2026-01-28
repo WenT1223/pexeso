@@ -16,11 +16,15 @@ def activate_card(card_color, button_name):
         card_color_compare = card_color
         button_name.config(state="disabled")
     elif card_color == card_color_compare:
-        print("match")
         card_color_compare = ""
-        last_button_name.config(state="normal")
+        for i in range(1, 51):
+            last_button_name.place(y=last_button_name.winfo_y() + i)
+            button_name.place(y=last_button_name.winfo_y() + i)
+            root.update()
+            root.after(10)
+        last_button_name.destroy()
+        button_name.destroy()
     else:
-        print("no match")
         card_color_compare = ""
         last_button_name.config(state="normal")
     last_button_name = button_name
@@ -29,8 +33,9 @@ def activate_card(card_color, button_name):
 # Function will choose NxN cords and then create 2N cards
 coordinates_2x2 = [(geometry_x/2-30, geometry_y/2-30), (geometry_x/2+30, geometry_y/2-30),
                    (geometry_x/2-30, geometry_y/2+30), (geometry_x/2+30, geometry_y/2+30)]
-first_card = PhotoImage(file="imgs/1.png")
-second_card = PhotoImage(file="imgs/2.png")
+first_card = PhotoImage(file="imgs/red.png")
+second_card = PhotoImage(file="imgs/blue.png")
+cover_card = PhotoImage(file="imgs/green.png")
 
 first_card_button = tk.Button(frame, image=first_card, bd=0, bg="red",
                               activebackground="red", command=lambda: activate_card("red", first_card_button))
