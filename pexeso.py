@@ -9,7 +9,7 @@ frame = tk.Frame(root, bg="black")
 frame.place(relheight=1, relwidth=1)
 card_color_compare = ""
 
-
+# Make all card change color(image) after pressing, after second is pressed change back to cover image
 def activate_card(card_color, button_name):
     global card_color_compare, last_button_name
     if card_color_compare == "":
@@ -43,6 +43,7 @@ red_card = PhotoImage(file="imgs/red.png")
 blue_card = PhotoImage(file="imgs/blue.png")
 cover_card = PhotoImage(file="imgs/green.png")
 
+# Make all cards green at start
 red_card_button = tk.Button(frame, image=cover_card, bd=0, bg="green",
                               activebackground="green", command=lambda: activate_card("red", red_card_button))
 red_card_copy_button = tk.Button(
