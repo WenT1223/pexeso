@@ -1,2 +1,9 @@
-print("THIS IS TEST")
-print("TEST 2")
+import tkinter as tk
+
+root = tk.Tk()
+root.title("Pexeso Alpha")
+frame = tk.Canvas(root, height=600, width=600, bg="black")
+frame.pack()
+
+
+root.mainloop()
