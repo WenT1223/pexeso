@@ -2,60 +2,71 @@ import tkinter as tk
 from tkinter import PhotoImage
 
 root = tk.Tk()
-root.title("Pexeso Alpha")
+root.title("Pexeso Alpha 2.0")
 geometry_x, geometry_y = 600, 600
 root.geometry(f"{geometry_x}x{geometry_y}")
 frame = tk.Frame(root, bg="black")
 frame.place(relheight=1, relwidth=1)
-card_color_compare = ""
+previous_card = None
+current_card = None
+card_is_activated = False
 
-# Make all card change color(image) after pressing, after second is pressed change back to cover image
-def activate_card(card_color, button_name):
-    global card_color_compare, last_button_name
-    if card_color_compare == "":
-        card_color_compare = card_color
-        if card_color == "red":
-            img = red_card
-        elif card_color == "blue":
-            img = blue_card
-        button_name.config(state="disabled", image=img, bg=card_color, activebackground=card_color)
-    elif card_color == card_color_compare:
-        card_color_compare = ""
-        for i in range(1, 51):
-            last_button_name.place(y=last_button_name.winfo_y() + i)
-            button_name.place(y=last_button_name.winfo_y() + i)
+def activate_card(color_of_card, name_of_button):
+    global previous_card, current_card, card_is_activated
+    if card_is_activated == False:
+        name_of_button.config(state="disabled", image=get_image_by_color(color_of_card), bg=color_of_card, activebackground=color_of_card)
+        card_is_activated = True
+        previous_card = [color_of_card, name_of_button]
+    elif card_is_activated == True:
+        name_of_button.config(state="disabled", image=get_image_by_color(color_of_card), bg=color_of_card, activebackground=color_of_card)
+        current_card = [color_of_card, name_of_button]
+        card_is_activated = False
+        compare_cards(previous_card, current_card)
+
+
+def compare_cards(previous_card, current_card):
+    if previous_card[0] == current_card[0]:
+        for i in range(1, 101):
+            previous_card[1].place(y=previous_card[1].winfo_y() + i)
+            current_card[1].place(y=current_card[1].winfo_y() + i)
             root.update()
             root.after(10)
-        last_button_name.destroy()
-        button_name.destroy()
+        destroy_cards(previous_card[1], current_card[1])
     else:
-        if card_color == "red":
-            img = red_card
-        elif card_color == "blue":
-            img = blue_card
-        button_name.config(state="disabled", image=img, bg=card_color, activebackground=card_color)
-        card_color_compare = ""
-        last_button_name.config(state="normal", image=cover_card, bg="green", activebackground="green")
-        button_name.config(state="normal", image=cover_card, bg="green", activebackground="green")
-    last_button_name = button_name
+        root.after(1000, lambda: flip_cards_back(previous_card[1], current_card[1]))
 
 
-# Function will choose NxN cords and then create 2N cards
+def destroy_cards(destroy_1, destroy_2):
+    destroy_1.destroy()
+    destroy_2.destroy()
+
+def flip_cards_back(card_1, card_2):
+    card_1.config(state="normal", image=cover_card, bg="green", activebackground="green")
+    card_2.config(state="normal", image=cover_card, bg="green", activebackground="green")
+
+def get_image_by_color(color_of_card):
+    if color_of_card == "red":
+        return red_card
+    elif color_of_card == "blue":
+        return blue_card
+    else:
+        return None
+
+
 coordinates_2x2 = [(geometry_x/2-30, geometry_y/2-30), (geometry_x/2+30, geometry_y/2-30),
                    (geometry_x/2-30, geometry_y/2+30), (geometry_x/2+30, geometry_y/2+30)]
 red_card = PhotoImage(file="imgs/red.png")
 blue_card = PhotoImage(file="imgs/blue.png")
 cover_card = PhotoImage(file="imgs/green.png")
 
-# Make all cards green at start
 red_card_button = tk.Button(frame, image=cover_card, bd=0, bg="green",
                               activebackground="green", command=lambda: activate_card("red", red_card_button))
 red_card_copy_button = tk.Button(
-    frame, image=red_card, bd=0, bg="red", activebackground="red", command=lambda: activate_card("red", red_card_copy_button))
+    frame, image=cover_card, bd=0, bg="green", activebackground="green", command=lambda: activate_card("red", red_card_copy_button))
 blue_card_button = tk.Button(
     frame, image=cover_card, bd=0, bg="green", activebackground="green", command=lambda: activate_card("blue", blue_card_button))
 blue_card_copy_button = tk.Button(
-    frame, image=blue_card, bd=0, bg="blue", activebackground="blue", command=lambda: activate_card("blue", blue_card_copy_button))
+    frame, image=cover_card, bd=0, bg="green", activebackground="green", command=lambda: activate_card("blue", blue_card_copy_button))
 
 red_card_button.place(
     anchor="center", x=coordinates_2x2[0][0], y=coordinates_2x2[0][1])
@@ -65,9 +76,5 @@ blue_card_button.place(
     anchor="center", x=coordinates_2x2[1][0], y=coordinates_2x2[1][1])
 blue_card_copy_button.place(
     anchor="center", x=coordinates_2x2[2][0], y=coordinates_2x2[2][1])
-
-# for i in range(len(coordinates_2x2)):
-#     cover_card_i = tk.Label(frame, image=cover_card, height=40, width=40)
-#     cover_card_i.place(anchor="center", x=coordinates_2x2[i][0], y=coordinates_2x2[i][1])
 
 root.mainloop()
