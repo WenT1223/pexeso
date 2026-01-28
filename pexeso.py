@@ -14,7 +14,13 @@ def activate_card(card_color, button_name):
     global card_color_compare, last_button_name
     if card_color_compare == "":
         card_color_compare = card_color
-        button_name.config(state="disabled")
+        if card_color == "red":
+            img = red_card
+        elif card_color == "blue":
+            img = blue_card
+        else:
+            img = cover_card
+        button_name.config(state="disabled", image=img, bg=card_color, activebackground=card_color)
     elif card_color == card_color_compare:
         card_color_compare = ""
         for i in range(1, 51):
@@ -33,26 +39,30 @@ def activate_card(card_color, button_name):
 # Function will choose NxN cords and then create 2N cards
 coordinates_2x2 = [(geometry_x/2-30, geometry_y/2-30), (geometry_x/2+30, geometry_y/2-30),
                    (geometry_x/2-30, geometry_y/2+30), (geometry_x/2+30, geometry_y/2+30)]
-first_card = PhotoImage(file="imgs/red.png")
-second_card = PhotoImage(file="imgs/blue.png")
+red_card = PhotoImage(file="imgs/red.png")
+blue_card = PhotoImage(file="imgs/blue.png")
 cover_card = PhotoImage(file="imgs/green.png")
 
-first_card_button = tk.Button(frame, image=first_card, bd=0, bg="red",
-                              activebackground="red", command=lambda: activate_card("red", first_card_button))
-first_card_copy_button = tk.Button(
-    frame, image=first_card, bd=0, bg="red", activebackground="red", command=lambda: activate_card("red", first_card_copy_button))
-second_card_button = tk.Button(
-    frame, image=second_card, bd=0, bg="blue", activebackground="blue", command=lambda: activate_card("blue", second_card_button))
-second_card_copy_button = tk.Button(
-    frame, image=second_card, bd=0, bg="blue", activebackground="blue", command=lambda: activate_card("blue", second_card_copy_button))
+red_card_button = tk.Button(frame, image=cover_card, bd=0, bg="green",
+                              activebackground="green", command=lambda: activate_card("red", red_card_button))
+red_card_copy_button = tk.Button(
+    frame, image=red_card, bd=0, bg="red", activebackground="red", command=lambda: activate_card("red", red_card_copy_button))
+blue_card_button = tk.Button(
+    frame, image=blue_card, bd=0, bg="blue", activebackground="blue", command=lambda: activate_card("blue", blue_card_button))
+blue_card_copy_button = tk.Button(
+    frame, image=blue_card, bd=0, bg="blue", activebackground="blue", command=lambda: activate_card("blue", blue_card_copy_button))
 
-first_card_button.place(
+red_card_button.place(
     anchor="center", x=coordinates_2x2[0][0], y=coordinates_2x2[0][1])
-first_card_copy_button.place(
+red_card_copy_button.place(
     anchor="center", x=coordinates_2x2[3][0], y=coordinates_2x2[3][1])
-second_card_button.place(
+blue_card_button.place(
     anchor="center", x=coordinates_2x2[1][0], y=coordinates_2x2[1][1])
-second_card_copy_button.place(
+blue_card_copy_button.place(
     anchor="center", x=coordinates_2x2[2][0], y=coordinates_2x2[2][1])
+
+# for i in range(len(coordinates_2x2)):
+#     cover_card_i = tk.Label(frame, image=cover_card, height=40, width=40)
+#     cover_card_i.place(anchor="center", x=coordinates_2x2[i][0], y=coordinates_2x2[i][1])
 
 root.mainloop()
