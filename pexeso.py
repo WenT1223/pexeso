@@ -18,8 +18,6 @@ def activate_card(card_color, button_name):
             img = red_card
         elif card_color == "blue":
             img = blue_card
-        else:
-            img = cover_card
         button_name.config(state="disabled", image=img, bg=card_color, activebackground=card_color)
     elif card_color == card_color_compare:
         card_color_compare = ""
@@ -31,8 +29,14 @@ def activate_card(card_color, button_name):
         last_button_name.destroy()
         button_name.destroy()
     else:
+        if card_color == "red":
+            img = red_card
+        elif card_color == "blue":
+            img = blue_card
+        button_name.config(state="disabled", image=img, bg=card_color, activebackground=card_color)
         card_color_compare = ""
-        last_button_name.config(state="normal")
+        last_button_name.config(state="normal", image=cover_card, bg="green", activebackground="green")
+        button_name.config(state="normal", image=cover_card, bg="green", activebackground="green")
     last_button_name = button_name
 
 
@@ -49,7 +53,7 @@ red_card_button = tk.Button(frame, image=cover_card, bd=0, bg="green",
 red_card_copy_button = tk.Button(
     frame, image=red_card, bd=0, bg="red", activebackground="red", command=lambda: activate_card("red", red_card_copy_button))
 blue_card_button = tk.Button(
-    frame, image=blue_card, bd=0, bg="blue", activebackground="blue", command=lambda: activate_card("blue", blue_card_button))
+    frame, image=cover_card, bd=0, bg="green", activebackground="green", command=lambda: activate_card("blue", blue_card_button))
 blue_card_copy_button = tk.Button(
     frame, image=blue_card, bd=0, bg="blue", activebackground="blue", command=lambda: activate_card("blue", blue_card_copy_button))
 
